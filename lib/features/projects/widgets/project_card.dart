@@ -15,14 +15,42 @@ class ProjectCard extends StatelessWidget {
     this.onTap,
   });
 
-  Color _statusColor() {
+  Color _statusBgColor() {
     switch (project.status) {
       case 'in_progress':
-        return AppTheme.statusInProgress;
+        return AppTheme.statusInProgressBg;
       case 'done':
-        return AppTheme.statusDone;
+        return AppTheme.statusDoneBg;
+      case 'planning':
+        return AppTheme.statusPlanningBg;
       default:
-        return AppTheme.statusIdea;
+        return AppTheme.statusIdeaBg;
+    }
+  }
+
+  Color _statusTextColor() {
+    switch (project.status) {
+      case 'in_progress':
+        return AppTheme.statusInProgressText;
+      case 'done':
+        return AppTheme.statusDoneText;
+      case 'planning':
+        return AppTheme.statusPlanningText;
+      default:
+        return AppTheme.statusIdeaText;
+    }
+  }
+
+  IconData _statusIcon() {
+    switch (project.status) {
+      case 'in_progress':
+        return Icons.play_circle_outline;
+      case 'done':
+        return Icons.check_circle_outline;
+      case 'planning':
+        return Icons.schedule_outlined;
+      default:
+        return Icons.lightbulb_outline;
     }
   }
 
@@ -31,94 +59,196 @@ class ProjectCard extends StatelessWidget {
     final statusLabel =
         AppConstants.projectStatusLabels[project.status] ?? project.status;
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppTheme.borderRadius),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      project.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceColor,
+        borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
+        boxShadow: AppTheme.cardShadow,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title row with badge
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        project.title,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textPrimary,
+                          height: 1.3,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: _statusColor().withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      statusLabel,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: _statusColor(),
+                    const SizedBox(width: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: _statusBgColor(),
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                project.description,
-                maxLines: AppConstants.descriptionMaxLines,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade600,
-                  height: 1.4,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Icon(
-                    Icons.calendar_today_outlined,
-                    size: 14,
-                    color: Colors.grey.shade400,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    Formatters.formatDateShort(project.createdAt),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade400,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  if (project.ideaIds.isNotEmpty) ...[
-                    Icon(
-                      Icons.lightbulb_outline,
-                      size: 14,
-                      color: Colors.grey.shade400,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${project.ideaIds.length} idée${project.ideaIds.length > 1 ? 's' : ''}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade400,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            _statusIcon(),
+                            size: 14,
+                            color: _statusTextColor(),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            statusLabel,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: _statusTextColor(),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(height: 10),
+
+                // Description
+                Text(
+                  project.description,
+                  maxLines: AppConstants.descriptionMaxLines,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppTheme.textBody,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Footer with date, ideas count, progress
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppTheme.backgroundColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today_outlined,
+                            size: 14,
+                            color: AppTheme.textMuted,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            Formatters.formatDateShort(project.createdAt),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: AppTheme.textMuted,
+                            ),
+                          ),
+                          if (project.ideaIds.isNotEmpty) ...[
+                            const SizedBox(width: 16),
+                            Icon(
+                              Icons.lightbulb_outline,
+                              size: 14,
+                              color: AppTheme.textMuted,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${project.ideaIds.length} idée${project.ideaIds.length > 1 ? 's' : ''}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: AppTheme.textMuted,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      // Progress bar for in-progress projects
+                      if (project.status == 'in_progress') ...[
+                        const SizedBox(height: 10),
+                        _ProgressBar(progress: _calculateProgress()),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  double _calculateProgress() {
+    if (project.endDate == null) return 0.5;
+    final total =
+        project.endDate!.difference(project.createdAt).inDays.toDouble();
+    if (total <= 0) return 1.0;
+    final elapsed =
+        DateTime.now().difference(project.createdAt).inDays.toDouble();
+    return (elapsed / total).clamp(0.0, 1.0);
+  }
+}
+
+class _ProgressBar extends StatelessWidget {
+  final double progress;
+
+  const _ProgressBar({required this.progress});
+
+  @override
+  Widget build(BuildContext context) {
+    final percent = (progress * 100).toInt();
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 6,
+            decoration: BoxDecoration(
+              color: AppTheme.borderLight,
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: progress,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.primaryColor, AppTheme.secondaryColor],
+                  ),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          '$percent%',
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: AppTheme.textMuted,
+          ),
+        ),
+      ],
     );
   }
 }
