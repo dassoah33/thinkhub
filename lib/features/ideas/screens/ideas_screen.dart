@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../providers/ideas_provider.dart';
 import '../widgets/idea_card.dart';
 
@@ -28,11 +29,11 @@ class IdeasScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.error_outline, size: 48, color: Colors.grey.shade400),
+              Icon(Icons.error_outline, size: 48, color: AppTheme.textMuted),
               const SizedBox(height: 16),
-              Text(
+              const Text(
                 'Erreur de chargement',
-                style: TextStyle(color: Colors.grey.shade600),
+                style: TextStyle(color: AppTheme.textBody),
               ),
               const SizedBox(height: 8),
               TextButton(
@@ -48,23 +49,31 @@ class IdeasScreen extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.lightbulb_outline,
-                      size: 64, color: Colors.grey.shade300),
-                  const SizedBox(height: 16),
-                  Text(
+                  Container(
+                    width: 72,
+                    height: 72,
+                    decoration: const BoxDecoration(
+                      color: AppTheme.statsIdeaBg,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.lightbulb_outline,
+                        size: 36, color: AppTheme.primaryColor),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
                     'Ajoutez votre première idée !',
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade500,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
+                  const Text(
                     'Appuyez sur + pour commencer',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey.shade400,
+                      color: AppTheme.textMuted,
                     ),
                   ),
                 ],
@@ -99,9 +108,20 @@ class IdeasScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Supprimer cette idée ?'),
-        content:
-            const Text('Cette action est irréversible.'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
+        ),
+        title: const Text(
+          'Supprimer cette idée ?',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: AppTheme.textPrimary,
+          ),
+        ),
+        content: const Text(
+          'Cette action est irréversible.',
+          style: TextStyle(color: AppTheme.textBody),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -115,7 +135,7 @@ class IdeasScreen extends ConsumerWidget {
                 const SnackBar(content: Text('Idée supprimée')),
               );
             },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            style: TextButton.styleFrom(foregroundColor: AppTheme.deleteIcon),
             child: const Text('Supprimer'),
           ),
         ],

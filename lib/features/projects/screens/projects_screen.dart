@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/theme/app_theme.dart';
 import '../../../utils/constants.dart';
 import '../providers/projects_provider.dart';
 import '../widgets/project_card.dart';
@@ -26,9 +27,9 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
       ),
       body: Column(
         children: [
-          // Filtres par statut
+          // Filter chips
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -55,7 +56,7 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
             ),
           ),
 
-          // Liste des projets
+          // Projects list
           Expanded(
             child: projectsState.when(
               loading: () =>
@@ -65,11 +66,11 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.error_outline,
-                        size: 48, color: Colors.grey.shade400),
+                        size: 48, color: AppTheme.textMuted),
                     const SizedBox(height: 16),
-                    Text(
+                    const Text(
                       'Erreur de chargement',
-                      style: TextStyle(color: Colors.grey.shade600),
+                      style: TextStyle(color: AppTheme.textBody),
                     ),
                     const SizedBox(height: 8),
                     TextButton(
@@ -92,15 +93,23 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.folder_outlined,
-                            size: 64, color: Colors.grey.shade300),
+                        Container(
+                          width: 64,
+                          height: 64,
+                          decoration: const BoxDecoration(
+                            color: AppTheme.statsProjectBg,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.folder_outlined,
+                              size: 32, color: AppTheme.statusIdea),
+                        ),
                         const SizedBox(height: 16),
-                        Text(
+                        const Text(
                           'Aucun projet pour le moment',
                           style: TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey.shade500,
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.textBody,
                           ),
                         ),
                       ],
@@ -109,7 +118,7 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                 }
 
                 return ListView.builder(
-                  padding: const EdgeInsets.only(top: 8, bottom: 24),
+                  padding: const EdgeInsets.only(top: 4, bottom: 24),
                   itemCount: filtered.length,
                   itemBuilder: (context, index) {
                     final project = filtered[index];
@@ -142,17 +151,44 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilterChip(
-      label: Text(label),
-      selected: selected,
-      onSelected: (_) => onSelected(),
-      selectedColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
-      checkmarkColor: Theme.of(context).colorScheme.primary,
-      labelStyle: TextStyle(
-        color: selected
-            ? Theme.of(context).colorScheme.primary
-            : Colors.grey.shade600,
-        fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+    return GestureDetector(
+      onTap: onSelected,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: selected ? AppTheme.primaryColor : AppTheme.surfaceColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: selected ? AppTheme.primaryColor : AppTheme.borderDefault,
+          ),
+          boxShadow: selected
+              ? [
+                  BoxShadow(
+                    color: AppTheme.primaryColor.withValues(alpha: 0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : [],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (selected) ...[
+              const Icon(Icons.check, size: 16, color: Colors.white),
+              const SizedBox(width: 4),
+            ],
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                color: selected ? Colors.white : AppTheme.textBody,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

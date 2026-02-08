@@ -19,14 +19,36 @@ class IdeaCard extends StatelessWidget {
     this.onDelete,
   });
 
-  Color _statusColor() {
+  Color _statusBgColor() {
     switch (idea.status) {
       case 'in_progress':
-        return AppTheme.statusInProgress;
+        return AppTheme.statusInProgressBg;
       case 'done':
-        return AppTheme.statusDone;
+        return AppTheme.statusDoneBg;
       default:
-        return AppTheme.statusIdea;
+        return AppTheme.statusIdeaBg;
+    }
+  }
+
+  Color _statusTextColor() {
+    switch (idea.status) {
+      case 'in_progress':
+        return AppTheme.statusInProgressText;
+      case 'done':
+        return AppTheme.statusDoneText;
+      default:
+        return AppTheme.statusIdeaText;
+    }
+  }
+
+  IconData _statusIcon() {
+    switch (idea.status) {
+      case 'in_progress':
+        return Icons.play_circle_outline;
+      case 'done':
+        return Icons.check_circle_outline;
+      default:
+        return Icons.lightbulb_outline;
     }
   }
 
@@ -35,101 +57,155 @@ class IdeaCard extends StatelessWidget {
     final statusLabel =
         AppConstants.ideaStatusLabels[idea.status] ?? idea.status;
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceColor,
+        borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
+        boxShadow: AppTheme.cardShadow,
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title + status badge
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        idea.title,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textPrimary,
+                          height: 1.3,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: _statusBgColor(),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            _statusIcon(),
+                            size: 14,
+                            color: _statusTextColor(),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            statusLabel,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: _statusTextColor(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                // Description
+                Text(
+                  idea.description,
+                  maxLines: AppConstants.descriptionMaxLines,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppTheme.textBody,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Footer: date + actions
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 12, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppTheme.backgroundColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.access_time_rounded,
+                        size: 14,
+                        color: AppTheme.textMuted,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        Formatters.timeAgo(idea.createdAt),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.textMuted,
+                        ),
+                      ),
+                      const Spacer(),
+                      if (onEdit != null)
+                        _ActionIcon(
+                          icon: Icons.edit_outlined,
+                          color: AppTheme.editIcon,
+                          onTap: onEdit!,
+                        ),
+                      if (onDelete != null) ...[
+                        const SizedBox(width: 4),
+                        _ActionIcon(
+                          icon: Icons.delete_outline,
+                          color: AppTheme.deleteIcon,
+                          onTap: onDelete!,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ActionIcon extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _ActionIcon({
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppTheme.borderRadius),
+        borderRadius: BorderRadius.circular(8),
         child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      idea.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: _statusColor().withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      statusLabel,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: _statusColor(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                idea.description,
-                maxLines: AppConstants.descriptionMaxLines,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade600,
-                  height: 1.4,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Icon(
-                    Icons.access_time,
-                    size: 14,
-                    color: Colors.grey.shade400,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    Formatters.timeAgo(idea.createdAt),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade400,
-                    ),
-                  ),
-                  const Spacer(),
-                  if (onEdit != null)
-                    IconButton(
-                      onPressed: onEdit,
-                      icon: const Icon(Icons.edit_outlined),
-                      iconSize: 20,
-                      color: Colors.grey.shade500,
-                      constraints: const BoxConstraints(
-                        minWidth: 36,
-                        minHeight: 36,
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
-                  if (onDelete != null)
-                    IconButton(
-                      onPressed: onDelete,
-                      icon: const Icon(Icons.delete_outline),
-                      iconSize: 20,
-                      color: AppTheme.errorColor,
-                      constraints: const BoxConstraints(
-                        minWidth: 36,
-                        minHeight: 36,
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
-                ],
-              ),
-            ],
-          ),
+          padding: const EdgeInsets.all(6),
+          child: Icon(icon, size: 20, color: color),
         ),
       ),
     );
