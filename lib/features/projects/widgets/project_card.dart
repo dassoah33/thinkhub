@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thinkhub/core/l10n/app_localizations.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/constants.dart';
@@ -54,10 +55,24 @@ class ProjectCard extends StatelessWidget {
     }
   }
 
+  /// Retourne le label localisé pour un statut de projet
+  String _getProjectStatusLabel(AppLocalizations l10n, String statusKey) {
+    switch (statusKey) {
+      case AppConstants.projectStatusPlanning:
+        return l10n.projectStatusPlanning;
+      case AppConstants.projectStatusInProgress:
+        return l10n.projectStatusInProgress;
+      case AppConstants.projectStatusDone:
+        return l10n.projectStatusDone;
+      default:
+        return statusKey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final statusLabel =
-        AppConstants.projectStatusLabels[project.status] ?? project.status;
+    final l10n = AppLocalizations.of(context)!;
+    final statusLabel = _getProjectStatusLabel(l10n, project.status);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -155,7 +170,7 @@ class ProjectCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            Formatters.formatDateShort(project.createdAt),
+                            Formatters.formatDateShort(context, project.createdAt),
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -171,7 +186,7 @@ class ProjectCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              '${project.ideaIds.length} idée${project.ideaIds.length > 1 ? 's' : ''}',
+                              l10n.ideaCount(project.ideaIds.length),
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,

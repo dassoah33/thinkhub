@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thinkhub/core/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,11 +12,12 @@ class IdeasScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final ideasState = ref.watch(ideasProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Idées'),
+        title: Text(l10n.ideasTitle),
         actions: [
           IconButton(
             onPressed: () => context.go('/ideas/form'),
@@ -31,14 +33,14 @@ class IdeasScreen extends ConsumerWidget {
             children: [
               Icon(Icons.error_outline, size: 48, color: AppTheme.textMuted),
               const SizedBox(height: 16),
-              const Text(
-                'Erreur de chargement',
-                style: TextStyle(color: AppTheme.textBody),
+              Text(
+                l10n.loadingError,
+                style: const TextStyle(color: AppTheme.textBody),
               ),
               const SizedBox(height: 8),
               TextButton(
                 onPressed: () => ref.read(ideasProvider.notifier).loadIdeas(),
-                child: const Text('Réessayer'),
+                child: Text(l10n.retry),
               ),
             ],
           ),
@@ -60,18 +62,18 @@ class IdeasScreen extends ConsumerWidget {
                         size: 36, color: AppTheme.primaryColor),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Ajoutez votre première idée !',
-                    style: TextStyle(
+                  Text(
+                    l10n.addFirstIdea,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: AppTheme.textSecondary,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Appuyez sur + pour commencer',
-                    style: TextStyle(
+                  Text(
+                    l10n.tapPlusToStart,
+                    style: const TextStyle(
                       fontSize: 14,
                       color: AppTheme.textMuted,
                     ),
@@ -105,38 +107,40 @@ class IdeasScreen extends ConsumerWidget {
   }
 
   void _confirmDelete(BuildContext context, WidgetRef ref, String ideaId) {
+    final l10n = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
         ),
-        title: const Text(
-          'Supprimer cette idée ?',
-          style: TextStyle(
+        title: Text(
+          l10n.deleteIdeaTitle,
+          style: const TextStyle(
             fontWeight: FontWeight.w600,
             color: AppTheme.textPrimary,
           ),
         ),
-        content: const Text(
-          'Cette action est irréversible.',
-          style: TextStyle(color: AppTheme.textBody),
+        content: Text(
+          l10n.deleteIdeaContent,
+          style: const TextStyle(color: AppTheme.textBody),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Annuler'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () {
               ref.read(ideasProvider.notifier).deleteIdea(ideaId);
               Navigator.of(ctx).pop();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Idée supprimée')),
+                SnackBar(content: Text(l10n.ideaDeleted)),
               );
             },
             style: TextButton.styleFrom(foregroundColor: AppTheme.deleteIcon),
-            child: const Text('Supprimer'),
+            child: Text(l10n.delete),
           ),
         ],
       ),

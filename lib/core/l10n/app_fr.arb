@@ -1,0 +1,169 @@
+{
+  "@@locale": "fr",
+
+  "appTitle": "ThinkHub",
+
+  "navDashboard": "Dashboard",
+  "navIdeas": "Idées",
+  "navProjects": "Projets",
+
+  "greetingMorning": "Bonjour",
+  "greetingAfternoon": "Bon après-midi",
+  "greetingEvening": "Bonsoir",
+  "dashboardSubtitle": "Vue d'ensemble de vos idées et projets",
+
+  "statsTotalIdeas": "Total idées",
+  "statsProjects": "Projets",
+  "statsInProgress": "En cours",
+
+  "recentIdeas": "Idées récentes",
+  "viewAll": "Voir tout",
+  "quickActions": "Actions rapides",
+  "newIdea": "Nouvelle idée",
+  "viewIdeas": "Voir les idées",
+  "viewProjects": "Voir les projets",
+
+  "noIdeasYet": "Aucune idée pour le moment",
+  "addFirstIdea": "Ajoutez votre première idée !",
+  "tapPlusToStart": "Appuyez sur + pour commencer",
+
+  "loadingError": "Erreur de chargement",
+  "retry": "Réessayer",
+
+  "ideasTitle": "Idées",
+
+  "deleteIdeaTitle": "Supprimer cette idée ?",
+  "deleteIdeaContent": "Cette action est irréversible.",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "ideaDeleted": "Idée supprimée",
+
+  "editIdea": "Modifier l'idée",
+  "newIdeaTitle": "Nouvelle idée",
+  "titleLabel": "Titre",
+  "titleHint": "Donnez un titre à votre idée",
+  "descriptionLabel": "Description",
+  "descriptionHint": "Décrivez votre idée en détail...",
+  "statusLabel": "Statut",
+  "save": "Enregistrer",
+  "ideaUpdated": "Idée modifiée avec succès",
+  "ideaCreated": "Idée ajoutée avec succès",
+  "genericError": "Une erreur est survenue",
+
+  "statusIdea": "Idée",
+  "statusInProgress": "En cours",
+  "statusDone": "Terminé",
+
+  "projectStatusPlanning": "Planification",
+  "projectStatusInProgress": "En cours",
+  "projectStatusDone": "Terminé",
+
+  "projectsTitle": "Projets",
+  "filterAll": "Tous",
+  "noProjectsYet": "Aucun projet pour le moment",
+
+  "projectNotFound": "Projet non trouvé",
+  "information": "Informations",
+  "startDate": "Date de début",
+  "endDate": "Fin prévue",
+  "linkedIdeas": "Idées liées",
+  "noLinkedIdeas": "Aucune idée liée à ce projet",
+
+  "ideaCount": "{count, plural, =0{0 idée} =1{1 idée} other{{count} idées}}",
+  "@ideaCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "validationRequired": "{fieldName} est requis",
+  "@validationRequired": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      }
+    }
+  },
+  "validationMinLength": "{fieldName} doit contenir au moins {min} caractères",
+  "@validationMinLength": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      },
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "validationMaxLength": "{fieldName} ne doit pas dépasser {max} caractères",
+  "@validationMaxLength": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "fieldTitle": "Le titre",
+  "fieldDescription": "La description",
+  "fieldDefault": "Ce champ",
+
+  "timeAgoNow": "à l'instant",
+  "timeAgoMinutes": "{count, plural, =1{il y a 1 minute} other{il y a {count} minutes}}",
+  "@timeAgoMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoHours": "{count, plural, =1{il y a 1 heure} other{il y a {count} heures}}",
+  "@timeAgoHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoDays": "{count, plural, =1{il y a 1 jour} other{il y a {count} jours}}",
+  "@timeAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoMonths": "{count, plural, =1{il y a 1 mois} other{il y a {count} mois}}",
+  "@timeAgoMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoYears": "{count, plural, =1{il y a 1 an} other{il y a {count} ans}}",
+  "@timeAgoYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "monthJan": "Jan",
+  "monthFeb": "Fév",
+  "monthMar": "Mar",
+  "monthApr": "Avr",
+  "monthMay": "Mai",
+  "monthJun": "Juin",
+  "monthJul": "Juil",
+  "monthAug": "Août",
+  "monthSep": "Sep",
+  "monthOct": "Oct",
+  "monthNov": "Nov",
+  "monthDec": "Déc"
+}

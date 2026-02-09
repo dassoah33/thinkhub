@@ -13,19 +13,6 @@ class AppConstants {
   static const String projectStatusInProgress = 'in_progress';
   static const String projectStatusDone = 'done';
 
-  // Labels affichés pour les statuts
-  static const Map<String, String> ideaStatusLabels = {
-    statusIdea: 'Idée',
-    statusInProgress: 'En cours',
-    statusDone: 'Terminé',
-  };
-
-  static const Map<String, String> projectStatusLabels = {
-    projectStatusPlanning: 'Planification',
-    projectStatusInProgress: 'En cours',
-    projectStatusDone: 'Terminé',
-  };
-
   // Breakpoints responsive
   static const double mobileBreakpoint = 600;
 

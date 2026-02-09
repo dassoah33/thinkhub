@@ -1,23 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:thinkhub/core/l10n/app_localizations.dart';
+
 class Validators {
   Validators._();
 
-  static String? required(String? value, {String fieldName = 'Ce champ'}) {
+  static String? required(BuildContext context, String? value, {String? fieldName}) {
+    final l10n = AppLocalizations.of(context)!;
     if (value == null || value.trim().isEmpty) {
-      return '$fieldName est requis';
+      return l10n.validationRequired(fieldName ?? l10n.fieldDefault);
     }
     return null;
   }
 
-  static String? minLength(String? value, int min, {String fieldName = 'Ce champ'}) {
+  static String? minLength(BuildContext context, String? value, int min, {String? fieldName}) {
+    final l10n = AppLocalizations.of(context)!;
     if (value == null || value.trim().length < min) {
-      return '$fieldName doit contenir au moins $min caractères';
+      return l10n.validationMinLength(fieldName ?? l10n.fieldDefault, min);
     }
     return null;
   }
 
-  static String? maxLength(String? value, int max, {String fieldName = 'Ce champ'}) {
+  static String? maxLength(BuildContext context, String? value, int max, {String? fieldName}) {
+    final l10n = AppLocalizations.of(context)!;
     if (value != null && value.trim().length > max) {
-      return '$fieldName ne doit pas dépasser $max caractères';
+      return l10n.validationMaxLength(fieldName ?? l10n.fieldDefault, max);
     }
     return null;
   }

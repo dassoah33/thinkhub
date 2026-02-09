@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thinkhub/core/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../theme/app_theme.dart';
@@ -21,6 +22,7 @@ class NavigationMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentIndex = _currentIndex(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: child,
@@ -39,7 +41,7 @@ class NavigationMenu extends StatelessWidget {
                 final isActive = index == currentIndex;
                 return _NavItem(
                   icon: isActive ? item.activeIcon : item.icon,
-                  label: item.label,
+                  label: item.getLabel(l10n),
                   isActive: isActive,
                   onTap: () => context.go(item.route),
                 );
