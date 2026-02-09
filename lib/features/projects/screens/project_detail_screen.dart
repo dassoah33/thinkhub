@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thinkhub/core/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -53,8 +54,23 @@ class ProjectDetailScreen extends ConsumerWidget {
     }
   }
 
+  /// Retourne le label localisé pour un statut de projet
+  String _getProjectStatusLabel(AppLocalizations l10n, String statusKey) {
+    switch (statusKey) {
+      case AppConstants.projectStatusPlanning:
+        return l10n.projectStatusPlanning;
+      case AppConstants.projectStatusInProgress:
+        return l10n.projectStatusInProgress;
+      case AppConstants.projectStatusDone:
+        return l10n.projectStatusDone;
+      default:
+        return statusKey;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final projectAsync = ref.watch(projectByIdProvider(projectId));
     final linkedIdeasAsync = ref.watch(ideasByProjectProvider(projectId));
 
@@ -64,18 +80,17 @@ class ProjectDetailScreen extends ConsumerWidget {
       ),
       error: (error, _) => Scaffold(
         appBar: AppBar(),
-        body: const Center(child: Text('Erreur de chargement')),
+        body: Center(child: Text(l10n.loadingError)),
       ),
       data: (project) {
         if (project == null) {
           return Scaffold(
             appBar: AppBar(),
-            body: const Center(child: Text('Projet non trouvé')),
+            body: Center(child: Text(l10n.projectNotFound)),
           );
         }
 
-        final statusLabel =
-            AppConstants.projectStatusLabels[project.status] ?? project.status;
+        final statusLabel = _getProjectStatusLabel(l10n, project.status);
 
         return Scaffold(
           appBar: AppBar(
@@ -116,9 +131,9 @@ class ProjectDetailScreen extends ConsumerWidget {
                                   size: 18, color: AppTheme.statusIdea),
                             ),
                             const SizedBox(width: 12),
-                            const Text(
-                              'Informations',
-                              style: TextStyle(
+                            Text(
+                              l10n.information,
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                                 color: AppTheme.textPrimary,
@@ -168,14 +183,14 @@ class ProjectDetailScreen extends ConsumerWidget {
                         const SizedBox(height: 12),
                         _InfoRow(
                           icon: Icons.calendar_today_outlined,
-                          label: 'Date de début',
+                          label: l10n.startDate,
                           value: Formatters.formatDate(project.createdAt),
                         ),
                         if (project.endDate != null) ...[
                           const SizedBox(height: 10),
                           _InfoRow(
                             icon: Icons.event_outlined,
-                            label: 'Fin prévue',
+                            label: l10n.endDate,
                             value: Formatters.formatDate(project.endDate!),
                           ),
                         ],
@@ -199,9 +214,9 @@ class ProjectDetailScreen extends ConsumerWidget {
                           size: 18, color: AppTheme.primaryColor),
                     ),
                     const SizedBox(width: 12),
-                    const Text(
-                      'Idées liées',
-                      style: TextStyle(
+                    Text(
+                      l10n.linkedIdeas,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: AppTheme.textPrimary,
@@ -217,7 +232,7 @@ class ProjectDetailScreen extends ConsumerWidget {
                       child: CircularProgressIndicator(),
                     ),
                   ),
-                  error: (_, _) => const Text('Erreur de chargement'),
+                  error: (_, _) => Text(l10n.loadingError),
                   data: (ideas) {
                     if (ideas.isEmpty) {
                       return Container(
@@ -242,9 +257,9 @@ class ProjectDetailScreen extends ConsumerWidget {
                                     size: 24, color: AppTheme.textMuted),
                               ),
                               const SizedBox(height: 12),
-                              const Text(
-                                'Aucune idée liée à ce projet',
-                                style: TextStyle(
+                              Text(
+                                l10n.noLinkedIdeas,
+                                style: const TextStyle(
                                   color: AppTheme.textMuted,
                                   fontSize: 14,
                                 ),

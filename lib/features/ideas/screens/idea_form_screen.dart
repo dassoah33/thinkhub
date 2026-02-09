@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thinkhub/core/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -63,9 +64,24 @@ class _IdeaFormScreenState extends ConsumerState<IdeaFormScreen> {
     super.dispose();
   }
 
+  /// Retourne le label localisé pour un statut d'idée
+  String _getIdeaStatusLabel(AppLocalizations l10n, String statusKey) {
+    switch (statusKey) {
+      case AppConstants.statusIdea:
+        return l10n.statusIdea;
+      case AppConstants.statusInProgress:
+        return l10n.statusInProgress;
+      case AppConstants.statusDone:
+        return l10n.statusDone;
+      default:
+        return statusKey;
+    }
+  }
+
   Future<void> _saveIdea() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final l10n = AppLocalizations.of(context)!;
     setState(() => _isLoading = true);
 
     try {
@@ -88,7 +104,7 @@ class _IdeaFormScreenState extends ConsumerState<IdeaFormScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              _isEditMode ? 'Idée modifiée avec succès' : 'Idée ajoutée avec succès',
+              _isEditMode ? l10n.ideaUpdated : l10n.ideaCreated,
             ),
           ),
         );
@@ -97,7 +113,7 @@ class _IdeaFormScreenState extends ConsumerState<IdeaFormScreen> {
     } catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Une erreur est survenue')),
+          SnackBar(content: Text(l10n.genericError)),
         );
       }
     } finally {
@@ -109,9 +125,18 @@ class _IdeaFormScreenState extends ConsumerState<IdeaFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    // Liste des statuts avec leurs labels localisés
+    final statusEntries = [
+      AppConstants.statusIdea,
+      AppConstants.statusInProgress,
+      AppConstants.statusDone,
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isEditMode ? 'Modifier l\'idée' : 'Nouvelle idée'),
+        title: Text(_isEditMode ? l10n.editIdea : l10n.newIdeaTitle),
         leading: IconButton(
           onPressed: () => context.go('/ideas'),
           icon: const Icon(Icons.arrow_back),
@@ -126,27 +151,27 @@ class _IdeaFormScreenState extends ConsumerState<IdeaFormScreen> {
             children: [
               CustomTextField(
                 controller: _titleController,
-                label: 'Titre',
-                hint: 'Donnez un titre à votre idée',
+                label: l10n.titleLabel,
+                hint: l10n.titleHint,
                 autofocus: !_isEditMode,
                 textInputAction: TextInputAction.next,
                 validator: (value) =>
-                    Validators.required(value, fieldName: 'Le titre'),
+                    Validators.required(context, value, fieldName: l10n.fieldTitle),
               ),
               const SizedBox(height: 20),
               CustomTextField(
                 controller: _descriptionController,
-                label: 'Description',
-                hint: 'Décrivez votre idée en détail...',
+                label: l10n.descriptionLabel,
+                hint: l10n.descriptionHint,
                 maxLines: 5,
                 textInputAction: TextInputAction.newline,
                 keyboardType: TextInputType.multiline,
                 validator: (value) =>
-                    Validators.required(value, fieldName: 'La description'),
+                    Validators.required(context, value, fieldName: l10n.fieldDescription),
               ),
               const SizedBox(height: 20),
               Text(
-                'Statut',
+                l10n.statusLabel,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -155,13 +180,13 @@ class _IdeaFormScreenState extends ConsumerState<IdeaFormScreen> {
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                initialValue: _status,
+                value: _status,
                 decoration: const InputDecoration(),
-                items: AppConstants.ideaStatusLabels.entries
+                items: statusEntries
                     .map(
-                      (entry) => DropdownMenuItem(
-                        value: entry.key,
-                        child: Text(entry.value),
+                      (statusKey) => DropdownMenuItem(
+                        value: statusKey,
+                        child: Text(_getIdeaStatusLabel(l10n, statusKey)),
                       ),
                     )
                     .toList(),
@@ -173,7 +198,7 @@ class _IdeaFormScreenState extends ConsumerState<IdeaFormScreen> {
               ),
               const SizedBox(height: 32),
               PrimaryButton(
-                label: 'Enregistrer',
+                label: l10n.save,
                 icon: Icons.save_outlined,
                 onPressed: _saveIdea,
                 isLoading: _isLoading,
@@ -184,7 +209,7 @@ class _IdeaFormScreenState extends ConsumerState<IdeaFormScreen> {
                 width: double.infinity,
                 child: TextButton(
                   onPressed: () => context.go('/ideas'),
-                  child: const Text('Annuler'),
+                  child: Text(l10n.cancel),
                 ),
               ),
             ],

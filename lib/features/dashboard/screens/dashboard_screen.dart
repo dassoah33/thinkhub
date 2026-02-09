@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:thinkhub/core/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/providers/locale_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/formatters.dart';
@@ -12,15 +14,17 @@ import '../widgets/stats_card.dart';
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 
-  String _getGreeting() {
+  String _getGreeting(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Bonjour';
-    if (hour < 18) return 'Bon après-midi';
-    return 'Bonsoir';
+    if (hour < 12) return l10n.greetingMorning;
+    if (hour < 18) return l10n.greetingAfternoon;
+    return l10n.greetingEvening;
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final ideasState = ref.watch(ideasProvider);
     final projectsState = ref.watch(projectsProvider);
     final isDesktop =
@@ -45,6 +49,10 @@ class DashboardScreen extends ConsumerWidget {
             const Text('ThinkHub'),
           ],
         ),
+        actions: const [
+          _LanguageSwitcher(),
+          SizedBox(width: 8),
+        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(isDesktop ? 24.0 : 16.0),
@@ -53,7 +61,7 @@ class DashboardScreen extends ConsumerWidget {
           children: [
             // Greeting
             Text(
-              '${_getGreeting()} !',
+              '${_getGreeting(context)} !',
               style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w800,
@@ -61,9 +69,9 @@ class DashboardScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 4),
-            const Text(
-              'Vue d\'ensemble de vos idées et projets',
-              style: TextStyle(
+            Text(
+              l10n.dashboardSubtitle,
+              style: const TextStyle(
                 fontSize: 14,
                 color: AppTheme.textBody,
               ),
@@ -79,9 +87,9 @@ class DashboardScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Idées récentes',
-                  style: TextStyle(
+                Text(
+                  l10n.recentIdeas,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: AppTheme.textPrimary,
@@ -89,7 +97,7 @@ class DashboardScreen extends ConsumerWidget {
                 ),
                 TextButton(
                   onPressed: () => context.go('/ideas'),
-                  child: const Text('Voir tout'),
+                  child: Text(l10n.viewAll),
                 ),
               ],
             ),
@@ -99,9 +107,9 @@ class DashboardScreen extends ConsumerWidget {
             const SizedBox(height: 32),
 
             // Quick actions
-            const Text(
-              'Actions rapides',
-              style: TextStyle(
+            Text(
+              l10n.quickActions,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
                 color: AppTheme.textPrimary,
@@ -123,6 +131,8 @@ class DashboardScreen extends ConsumerWidget {
     AsyncValue projectsState,
     bool isDesktop,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+
     final ideaCount = ideasState.whenOrNull(
           data: (ideas) => (ideas as List).length,
         ) ??
@@ -142,7 +152,7 @@ class DashboardScreen extends ConsumerWidget {
 
     final children = [
       StatsCard(
-        title: 'Total idées',
+        title: l10n.statsTotalIdeas,
         value: ideaCount.toString(),
         icon: Icons.lightbulb_rounded,
         color: AppTheme.primaryColor,
@@ -150,7 +160,7 @@ class DashboardScreen extends ConsumerWidget {
         gradient: AppTheme.ideaGradient,
       ),
       StatsCard(
-        title: 'Projets',
+        title: l10n.statsProjects,
         value: projectCount.toString(),
         icon: Icons.folder_rounded,
         color: const Color(0xFF3B82F6),
@@ -158,7 +168,7 @@ class DashboardScreen extends ConsumerWidget {
         gradient: AppTheme.projectGradient,
       ),
       StatsCard(
-        title: 'En cours',
+        title: l10n.statsInProgress,
         value: inProgressCount.toString(),
         icon: Icons.trending_up_rounded,
         color: AppTheme.statusInProgress,
@@ -180,6 +190,8 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildRecentIdeas(BuildContext context, AsyncValue ideasState) {
+    final l10n = AppLocalizations.of(context)!;
+
     return ideasState.when(
       loading: () => const Center(
         child: Padding(
@@ -187,7 +199,7 @@ class DashboardScreen extends ConsumerWidget {
           child: CircularProgressIndicator(),
         ),
       ),
-      error: (_, _) => const Text('Erreur de chargement'),
+      error: (_, _) => Text(l10n.loadingError),
       data: (ideas) {
         final recentIdeas =
             (ideas as List).take(AppConstants.recentIdeasCount).toList();
@@ -199,10 +211,10 @@ class DashboardScreen extends ConsumerWidget {
               borderRadius: BorderRadius.circular(AppTheme.borderRadiusLg),
               boxShadow: AppTheme.cardShadow,
             ),
-            child: const Center(
+            child: Center(
               child: Text(
-                'Aucune idée pour le moment',
-                style: TextStyle(color: AppTheme.textMuted),
+                l10n.noIdeasYet,
+                style: const TextStyle(color: AppTheme.textMuted),
               ),
             ),
           );
@@ -282,7 +294,7 @@ class DashboardScreen extends ConsumerWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    Formatters.timeAgo(idea.createdAt),
+                                    Formatters.timeAgo(context, idea.createdAt),
                                     style: const TextStyle(
                                       fontSize: 12,
                                       color: AppTheme.textMuted,
@@ -351,24 +363,26 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildQuickActions(BuildContext context, bool isDesktop) {
+    final l10n = AppLocalizations.of(context)!;
+
     final actions = [
       _QuickAction(
         icon: Icons.add_rounded,
-        label: 'Nouvelle idée',
+        label: l10n.newIdea,
         color: AppTheme.primaryColor,
         bgColor: AppTheme.statsIdeaBg,
         onTap: () => context.go('/ideas/form'),
       ),
       _QuickAction(
         icon: Icons.lightbulb_outline,
-        label: 'Voir les idées',
+        label: l10n.viewIdeas,
         color: AppTheme.statusIdea,
         bgColor: AppTheme.statusIdeaBg,
         onTap: () => context.go('/ideas'),
       ),
       _QuickAction(
         icon: Icons.folder_outlined,
-        label: 'Voir les projets',
+        label: l10n.viewProjects,
         color: AppTheme.statusInProgress,
         bgColor: AppTheme.statsInProgressBg,
         onTap: () => context.go('/projects'),
@@ -397,6 +411,80 @@ class DashboardScreen extends ConsumerWidget {
           .toList(),
     );
   }
+}
+
+class _LanguageSwitcher extends ConsumerWidget {
+  const _LanguageSwitcher();
+
+  static const _languages = [
+    _LanguageOption(locale: Locale('fr'), flag: '🇫🇷', label: 'Français'),
+    _LanguageOption(locale: Locale('en'), flag: '🇬🇧', label: 'English'),
+    _LanguageOption(locale: Locale('es'), flag: '🇪🇸', label: 'Español'),
+  ];
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(localeProvider);
+
+    final currentFlag = _languages
+        .firstWhere(
+          (l) => l.locale.languageCode == currentLocale.languageCode,
+          orElse: () => _languages.first,
+        )
+        .flag;
+
+    return PopupMenuButton<Locale>(
+      tooltip: 'Language',
+      offset: const Offset(0, 45),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      icon: Text(currentFlag, style: const TextStyle(fontSize: 22)),
+      onSelected: (locale) {
+        ref.read(localeProvider.notifier).setLocale(locale);
+      },
+      itemBuilder: (context) => _languages.map((lang) {
+        final isSelected =
+            lang.locale.languageCode == currentLocale.languageCode;
+        return PopupMenuItem<Locale>(
+          value: lang.locale,
+          child: Row(
+            children: [
+              Text(lang.flag, style: const TextStyle(fontSize: 20)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  lang.label,
+                  style: TextStyle(
+                    fontWeight:
+                        isSelected ? FontWeight.w700 : FontWeight.w400,
+                    color: isSelected
+                        ? AppTheme.primaryColor
+                        : AppTheme.textPrimary,
+                  ),
+                ),
+              ),
+              if (isSelected)
+                const Icon(Icons.check_rounded,
+                    color: AppTheme.primaryColor, size: 20),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class _LanguageOption {
+  final Locale locale;
+  final String flag;
+  final String label;
+
+  const _LanguageOption({
+    required this.locale,
+    required this.flag,
+    required this.label,
+  });
 }
 
 class _QuickAction extends StatelessWidget {

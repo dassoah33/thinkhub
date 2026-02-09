@@ -1,9 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(find:*)",
-      "Bash(flutter analyze:*)",
-      "Bash(tree:*)"
+      "Bash(flutter build:*)",
+      "Bash(ls -la \"D:\\\\laragon\\\\www\\\\flutter\\\\thinkhub\\\\lib\\\\services\\\\local\"\" 2>&1 || echo \"Directory check failed \")",
+      "Bash(flutter pub get:*)"
     ]
   }
 }

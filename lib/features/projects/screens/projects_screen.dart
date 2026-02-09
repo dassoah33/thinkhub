@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thinkhub/core/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,13 +18,34 @@ class ProjectsScreen extends ConsumerStatefulWidget {
 class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
   String? _statusFilter;
 
+  /// Retourne le label localisé pour un statut de projet
+  String _getProjectStatusLabel(AppLocalizations l10n, String statusKey) {
+    switch (statusKey) {
+      case AppConstants.projectStatusPlanning:
+        return l10n.projectStatusPlanning;
+      case AppConstants.projectStatusInProgress:
+        return l10n.projectStatusInProgress;
+      case AppConstants.projectStatusDone:
+        return l10n.projectStatusDone;
+      default:
+        return statusKey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final projectsState = ref.watch(projectsProvider);
+
+    final projectStatusKeys = [
+      AppConstants.projectStatusPlanning,
+      AppConstants.projectStatusInProgress,
+      AppConstants.projectStatusDone,
+    ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Projets'),
+        title: Text(l10n.projectsTitle),
       ),
       body: Column(
         children: [
@@ -35,19 +57,19 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
               child: Row(
                 children: [
                   _FilterChip(
-                    label: 'Tous',
+                    label: l10n.filterAll,
                     selected: _statusFilter == null,
                     onSelected: () => setState(() => _statusFilter = null),
                   ),
                   const SizedBox(width: 8),
-                  ...AppConstants.projectStatusLabels.entries.map(
-                    (entry) => Padding(
+                  ...projectStatusKeys.map(
+                    (statusKey) => Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: _FilterChip(
-                        label: entry.value,
-                        selected: _statusFilter == entry.key,
+                        label: _getProjectStatusLabel(l10n, statusKey),
+                        selected: _statusFilter == statusKey,
                         onSelected: () =>
-                            setState(() => _statusFilter = entry.key),
+                            setState(() => _statusFilter = statusKey),
                       ),
                     ),
                   ),
@@ -68,15 +90,15 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                     Icon(Icons.error_outline,
                         size: 48, color: AppTheme.textMuted),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Erreur de chargement',
-                      style: TextStyle(color: AppTheme.textBody),
+                    Text(
+                      l10n.loadingError,
+                      style: const TextStyle(color: AppTheme.textBody),
                     ),
                     const SizedBox(height: 8),
                     TextButton(
                       onPressed: () =>
                           ref.read(projectsProvider.notifier).loadProjects(),
-                      child: const Text('Réessayer'),
+                      child: Text(l10n.retry),
                     ),
                   ],
                 ),
@@ -104,9 +126,9 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                               size: 32, color: AppTheme.statusIdea),
                         ),
                         const SizedBox(height: 16),
-                        const Text(
-                          'Aucun projet pour le moment',
-                          style: TextStyle(
+                        Text(
+                          l10n.noProjectsYet,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: AppTheme.textBody,

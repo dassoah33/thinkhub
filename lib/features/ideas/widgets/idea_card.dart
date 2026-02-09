@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thinkhub/core/l10n/app_localizations.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/constants.dart';
@@ -52,10 +53,24 @@ class IdeaCard extends StatelessWidget {
     }
   }
 
+  /// Retourne le label localisé pour un statut d'idée
+  String _getIdeaStatusLabel(AppLocalizations l10n, String statusKey) {
+    switch (statusKey) {
+      case AppConstants.statusIdea:
+        return l10n.statusIdea;
+      case AppConstants.statusInProgress:
+        return l10n.statusInProgress;
+      case AppConstants.statusDone:
+        return l10n.statusDone;
+      default:
+        return statusKey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final statusLabel =
-        AppConstants.ideaStatusLabels[idea.status] ?? idea.status;
+    final l10n = AppLocalizations.of(context)!;
+    final statusLabel = _getIdeaStatusLabel(l10n, idea.status);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -151,7 +166,7 @@ class IdeaCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        Formatters.timeAgo(idea.createdAt),
+                        Formatters.timeAgo(context, idea.createdAt),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,

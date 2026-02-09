@@ -1,0 +1,169 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "ThinkHub",
+
+  "navDashboard": "Dashboard",
+  "navIdeas": "Ideas",
+  "navProjects": "Projects",
+
+  "greetingMorning": "Good morning",
+  "greetingAfternoon": "Good afternoon",
+  "greetingEvening": "Good evening",
+  "dashboardSubtitle": "Overview of your ideas and projects",
+
+  "statsTotalIdeas": "Total ideas",
+  "statsProjects": "Projects",
+  "statsInProgress": "In progress",
+
+  "recentIdeas": "Recent ideas",
+  "viewAll": "View all",
+  "quickActions": "Quick actions",
+  "newIdea": "New idea",
+  "viewIdeas": "View ideas",
+  "viewProjects": "View projects",
+
+  "noIdeasYet": "No ideas yet",
+  "addFirstIdea": "Add your first idea!",
+  "tapPlusToStart": "Tap + to get started",
+
+  "loadingError": "Loading error",
+  "retry": "Retry",
+
+  "ideasTitle": "Ideas",
+
+  "deleteIdeaTitle": "Delete this idea?",
+  "deleteIdeaContent": "This action cannot be undone.",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "ideaDeleted": "Idea deleted",
+
+  "editIdea": "Edit idea",
+  "newIdeaTitle": "New idea",
+  "titleLabel": "Title",
+  "titleHint": "Give your idea a title",
+  "descriptionLabel": "Description",
+  "descriptionHint": "Describe your idea in detail...",
+  "statusLabel": "Status",
+  "save": "Save",
+  "ideaUpdated": "Idea updated successfully",
+  "ideaCreated": "Idea added successfully",
+  "genericError": "An error occurred",
+
+  "statusIdea": "Idea",
+  "statusInProgress": "In progress",
+  "statusDone": "Done",
+
+  "projectStatusPlanning": "Planning",
+  "projectStatusInProgress": "In progress",
+  "projectStatusDone": "Done",
+
+  "projectsTitle": "Projects",
+  "filterAll": "All",
+  "noProjectsYet": "No projects yet",
+
+  "projectNotFound": "Project not found",
+  "information": "Information",
+  "startDate": "Start date",
+  "endDate": "Expected end",
+  "linkedIdeas": "Linked ideas",
+  "noLinkedIdeas": "No ideas linked to this project",
+
+  "ideaCount": "{count, plural, =0{0 ideas} =1{1 idea} other{{count} ideas}}",
+  "@ideaCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "validationRequired": "{fieldName} is required",
+  "@validationRequired": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      }
+    }
+  },
+  "validationMinLength": "{fieldName} must contain at least {min} characters",
+  "@validationMinLength": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      },
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "validationMaxLength": "{fieldName} must not exceed {max} characters",
+  "@validationMaxLength": {
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "fieldTitle": "Title",
+  "fieldDescription": "Description",
+  "fieldDefault": "This field",
+
+  "timeAgoNow": "just now",
+  "timeAgoMinutes": "{count, plural, =1{1 minute ago} other{{count} minutes ago}}",
+  "@timeAgoMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoHours": "{count, plural, =1{1 hour ago} other{{count} hours ago}}",
+  "@timeAgoHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoDays": "{count, plural, =1{1 day ago} other{{count} days ago}}",
+  "@timeAgoDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoMonths": "{count, plural, =1{1 month ago} other{{count} months ago}}",
+  "@timeAgoMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "timeAgoYears": "{count, plural, =1{1 year ago} other{{count} years ago}}",
+  "@timeAgoYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "monthJan": "Jan",
+  "monthFeb": "Feb",
+  "monthMar": "Mar",
+  "monthApr": "Apr",
+  "monthMay": "May",
+  "monthJun": "Jun",
+  "monthJul": "Jul",
+  "monthAug": "Aug",
+  "monthSep": "Sep",
+  "monthOct": "Oct",
+  "monthNov": "Nov",
+  "monthDec": "Dec"
+}
