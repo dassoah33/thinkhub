@@ -27,6 +27,12 @@ lib/
 │   ├── navigation/
 │   │   ├── navigation_items.dart    # Définition des items de navigation
 │   │   └── navigation_menu.dart     # Barre de navigation du bas
+│   ├── l10n/
+│   │   ├── app_fr.arb               # Traductions français (langue par défaut)
+│   │   ├── app_en.arb               # Traductions anglais
+│   │   └── app_es.arb               # Traductions espagnol
+│   ├── providers/
+│   │   └── locale_provider.dart     # Gestion de la langue active (Riverpod)
 │   └── theme/
 │       └── app_theme.dart           # Thème complet (couleurs, typo, styles)
 │
@@ -121,6 +127,20 @@ feature/
 ├── widgets/        # Les widgets spécifiques à cette feature
 └── *_routes.dart   # La définition des routes de cette feature
 ```
+
+## Multilingue
+
+L'application supporte 3 langues avec le français comme langue par défaut :
+
+| Langue | Code | Drapeau |
+|--------|------|---------|
+| Français | `fr` | :fr: |
+| English | `en` | :gb: |
+| Español | `es` | :es: |
+
+- Sélecteur de langue accessible depuis l'AppBar du Dashboard
+- Le choix de langue est persisté localement (`shared_preferences`)
+- Les traductions utilisent le système `flutter_localizations` + fichiers ARB (`lib/core/l10n/`)
 
 ## Installation
 
